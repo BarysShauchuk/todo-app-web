@@ -1,0 +1,8 @@
+﻿@using Todo.Domain.Models;
+@model List<TodoItem>
+
+@{
+    ViewData["Title"] = $"Lists with notifiers";
+}
+
+<partial name="TodoItems" model="@Model" />

@@ -1,0 +1,23 @@
+﻿@using Todo.Application.Models.ViewModels;
+@model ReturnUrlViewModel<Todo.Domain.Models.TodoList>
+
+@{
+    ViewData["Title"] = $"Update list \"{Model.Model.Title}\"";
+}
+
+<div class="bg-light rounded p-3 overflow-auto flex-grow-0 gap-3 modal-content">
+    <form id="create-list-form" method="post"
+          asp-action="Update" asp-controller="TodoList" asp-antiforgery="true">
+        <input type="hidden" asp-for="Model.Id" />
+        <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+        <input type="hidden" asp-for="Model.IsHidden" />
+
+        <div class="my-3">
+            <input type="text" class="form-control" id="new-list-title" asp-for="Model.Title" placeholder="List title">
+        </div>
+
+        <a class="btn btn-secondary me-1" href="@Model.ReturnUrl">Cancel</a>
+        <input type="submit" class="btn btn-primary mx-1" value="Save" />
+        <span asp-validation-for="Model.Title" class="text-danger ms-1"></span>
+    </form>
+</div>

@@ -1,0 +1,70 @@
+﻿@using Todo.Application.Infrastructure;
+@using Todo.Application.Models.ViewModels;
+@using Todo.Domain.Models;
+@model IEnumerable<TodoListViewModel>
+
+
+<ul class="btn-toggle-nav list-unstyled fw-normal mb-0 small gap-2 modal-content">
+    @foreach (var listModel in Model)
+    {
+        <li class="position-relative hover-parent-hider">
+            <a asp-action="Index" asp-controller="TodoList" asp-route-id="@listModel.TodoList.Id" class="btn btn-light @(listModel.TodoList.Id == ViewBag.SelectedListId ? "border border-primary border-2" : "") w-100 flex-grow-0 justify-content-center gap-3">
+
+                <div class="d-flex justify-content-start mb-2">
+                    <span class="text-start pe-3">
+                        @listModel.TodoList.Title
+                    </span>
+                </div>
+
+                <div class="progress" style="height: 10px">
+                    <div class="progress-bar bg-primary" style="width: @listModel.CompletedItemsPercent%"></div>
+                    <div class="progress-bar bg-warning" style="width: @listModel.InProgressItemsPercent%"></div>
+                </div>
+
+                <span class="badge text-wrap">
+                    <span class="text-primary text-nowrap">@listModel.CompletedItemsNumber completed <span class="text-secondary">/</span></span>
+                    <span class="text-warning text-nowrap">@listModel.InProgressItemsNumber in progress <span class="text-secondary">/</span></span>
+                    <span class="text-secondary text-nowrap">@listModel.NotStartedItemsNumber not started</span>
+                </span>
+            </a>
+
+            <div class="dropdown position-absolute top-0 end-0 mt-1 me-2 ">
+                <button class="bg-transparent border-0 hover-child-hidden" type="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical fs-6 text-nohover-secondary text-hover-primary"></i>
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a class="dropdown-item" asp-action="Update" asp-controller="TodoList" asp-route-id="@listModel.TodoList.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
+                            <i class="bi bi-pencil-square"></i> Edit title
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-action="Copy" asp-controller="TodoList" asp-route-id="@listModel.TodoList.Id">
+                            <i class="bi bi-back"></i> Make a copy
+                        </a>
+                    </li>
+                    <li>
+                        <a class="dropdown-item" asp-action="Archive" asp-controller="TodoList" asp-route-id="@listModel.TodoList.Id">
+                            @if (listModel.TodoList.IsHidden)
+                            {
+                                <span><i class="bi bi-arrow-bar-up"></i> Dearchive</span>
+                            }
+                            else
+                            {
+                                <span><i class="bi bi-archive"></i> Archive</span>
+                            }
+                        </a>
+                    </li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li>
+                        <button class="dropdown-item text-danger" data-bs-toggle="modal"
+                                data-bs-target="#delete-list-@listModel.TodoList.Id">
+                            <i class="bi bi-trash3"></i> Delete
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    }
+</ul>

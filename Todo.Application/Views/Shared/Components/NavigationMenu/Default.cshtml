@@ -1,0 +1,60 @@
+﻿@using Todo.Application.Infrastructure;
+@using Todo.Application.Models.ViewModels;
+@using Todo.Domain.Models;
+@model NavigationMenuViewModel
+<aside class="col-4 offcanvas-start offcanvas-lg screen-sized bg-transparent overflow-auto px-lg-3 pb-lg-3" id="offcanvasResponsive">
+    <nav class="navigation d-lg-none bg-light text-dark ps-3 py-2 d-flex flex-row">
+        <button class="bg-transparent border-0 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
+            <i class="bi bi-x-lg fs-4 text-dark"></i>
+        </button>
+        <a asp-action="Index" asp-controller="Home" class="fs-4 ms-3 nav-link">TODO app</a>
+    </nav>
+    <div class="bg-light rounded rounded-lg p-3 overflow-auto h-100 flex-grow-0 gap-3 modal-content">
+
+
+        <a asp-action="UpcomingToday" asp-controller="Home" class="btn btn-light btn-lg w-100 text-start @(ViewBag.SelectedSection == "UpcomingToday" ? "border border-primary border-2" : "")">
+            <i class="bi bi-sun-fill text-warning pe-1"></i>
+            Upcoming today
+        </a>
+
+        <a asp-action="WithNotifiers" asp-controller="Home" class="btn btn-light btn-lg w-100 text-start @(ViewBag.SelectedSection == "WithNotifiers" ? "border border-primary border-2" : "")">
+            <i class="bi bi-bell-fill text-info pe-1"></i>
+            With notifiers
+        </a>
+
+        <a asp-action="Favorite" asp-controller="Home" class="btn btn-light btn-lg w-100 text-start @(ViewBag.SelectedSection == "Favorite" ? "border border-primary border-2" : "")">
+            <i class="bi bi-heart-fill text-danger pe-1"></i>
+            Favorite
+        </a>
+
+        <div class="gap-2 modal-content">
+            <button class="btn btn-light btn-lg w-100 text-start btn-collapse @(ViewBag.SelectedCurrentList ? "" : "collapsed")" style="z-index: 1"
+                    data-bs-toggle="collapse" data-bs-target="#lists-collapse" aria-expanded="@(ViewBag.SelectedCurrentList)">
+                <i class="bi bi-stickies-fill text-primary pe-1"></i>
+                <span style="white-space:break-spaces;"> All TODO lists</span>
+            </button>
+            <div class="collapse @(ViewBag.SelectedCurrentList ? "show" : "") ps-4 gap-2 modal-content" id="lists-collapse">
+                <a class="btn btn-light shadow-none w-100" asp-action="Create" asp-controller="TodoList" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
+                    <i class="bi bi-plus-circle-fill text-primary pe-1"></i>
+                    Create new list
+                </a>
+
+                <partial name="TodoLists" model="@Model.CurrentLists" />
+            </div>
+        </div>
+
+        <div class="gap-2 modal-content">
+            <button class="btn btn-light btn-lg w-100 text-start btn-collapse @(ViewBag.SelectedArchivedList ? "" : "collapsed")"
+                    data-bs-toggle="collapse" data-bs-target="#archive-collapse" aria-expanded="@(ViewBag.SelectedArchivedList)">
+                <i class="bi bi-archive-fill text-secondary pe-1"></i>
+                <span style="white-space:break-spaces;"> Archived lists</span>
+            </button>
+            <div class="collapse @(ViewBag.SelectedArchivedList ? "show" : "") ps-4" id="archive-collapse">
+                <partial name="TodoLists" model="@Model.HiddenLists" />
+            </div>
+        </div>
+    </div>
+</aside>
+
+<partial name="ModalDialogs/DeleteListsConformation" model="@Model.CurrentLists" />
+<partial name="ModalDialogs/DeleteListsConformation" model="@Model.HiddenLists" />

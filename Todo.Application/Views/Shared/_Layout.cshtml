@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - TODO app</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/lib/bootstrap-icons/font/bootstrap-icons.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body class="bg-dark">
+    <nav class="navigation bg-dark text-white ps-3 py-2 d-flex flex-row">
+        <button class="bg-transparent border-0 d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasResponsive" aria-controls="offcanvasResponsive">
+            <i class="bi bi-list fs-4 text-light"></i>
+        </button>
+        <a asp-action="Index" asp-controller="Home" class="fs-4 ms-3 nav-link">TODO app</a>
+    </nav>
+    <div class="row m-1">
+        <vc:navigation-menu />
+
+        <div class="col screen-sized pb-3 position-relative">
+            @RenderBody()
+        </div>
+    </div>
+
+    <vc:notifications />
+
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2023 - TODO app - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

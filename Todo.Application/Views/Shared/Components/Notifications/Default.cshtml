@@ -1,0 +1,30 @@
+﻿@using Todo.Application.Infrastructure;
+@using Todo.Domain.Models;
+@model IEnumerable<(TodoItem item, double days)>
+
+<div class=" position-fixed bottom-0 end-0">
+    @foreach (var itemModel in Model)
+    {
+        <div class="toast show fade ms-auto bg-white mb-2 me-2" id="static-example" role="alert"
+             aria-live="assertive" aria-atomic="true" data-mdb-autohide="false">
+            <div class="toast-header">
+                <i class="bi bi-bell-fill text-info pe-1"></i>
+                <strong class="me-auto">Task notification</strong>
+                <small>@(itemModel.days == 0 ? "Today" : $"{itemModel.days} day(s) ago")</small>
+                <a asp-action="ChangeRemind" asp-controller="TodoItem" asp-route-id="@itemModel.item.Id" asp-route-remind="false"
+                        asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()"
+                        type="button" class="btn-close" data-mdb-dismiss="toast"
+                        aria-label="Close"></a>
+            </div>
+            <div class="toast-body d-flex justify-content-between">
+                <div>@itemModel.item.TodoList.Title / @itemModel.item.Title</div>
+                <a asp-action="ChangeRemind" asp-controller="TodoItem"
+               asp-route-id="@itemModel.item.Id" asp-route-remind="false"
+                   type="button" class="btn btn-info btn-sm py-0 px-2" style="max-height: 1.5rem"
+                   data-mdb-dismiss="toast" aria-label="Close">
+                    Show
+                </a>
+            </div>
+        </div>
+    }
+</div>

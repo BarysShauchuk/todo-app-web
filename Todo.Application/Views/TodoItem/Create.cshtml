@@ -1,0 +1,44 @@
+﻿@using Todo.Application.Models.ViewModels;
+@model ReturnUrlViewModel<Todo.Domain.Models.TodoItem>
+
+@{
+    ViewData["Title"] = $"Create new item";
+}
+
+<div class="bg-light rounded p-3 overflow-auto flex-grow-0 gap-3 modal-content">
+    <form id="create-item-form" method="post"
+          asp-action="Create" asp-controller="TodoItem" asp-antiforgery="true">
+
+        <input type="hidden" asp-for="Model.Id" />
+        <input type="hidden" asp-for="Model.TodoListId" />
+        <input type="hidden" asp-for="Model.Status" />
+        <input type="hidden" asp-for="Model.Remind" />
+        <input type="hidden" asp-for="Model.Favorite" />
+
+        <input type="hidden" name="ReturnUrl" value="@Model.ReturnUrl" />
+
+        <div class="row gx-3 gy-2 align-items-center">
+            <div class="col-sm-7">
+                <input type="text" class="form-control" id="new-item-title" asp-for="Model.Title" placeholder="Title of new item">
+            </div>
+            <div class="col-sm-5">
+                <div class="input-group">
+                    <span class="input-group-text" id="basic-addon1">Due Date:</span>
+                    <input type="date" asp-for="Model.DueDate" class="form-control col-3" />
+                </div>
+            </div>
+        </div>
+
+        <div class="my-3">
+            <textarea class="form-control" rows="7" id="new-item-description" maxlength="500"
+                      asp-for="Model.Description" placeholder="Description">
+            </textarea>
+        </div>
+
+        <a class="btn btn-secondary me-1 mb-2" href="@Model.ReturnUrl">Cancel</a>
+        <input type="submit" class="btn btn-primary mx-1 mb-2" value="Create" />
+        <span asp-validation-for="Model.Title" class="text-danger ms-1"></span>
+        <span asp-validation-for="Model.DueDate" class="text-danger ms-1"></span>
+        <span asp-validation-for="Model.Description" class="text-danger ms-1"></span>
+    </form>
+</div>

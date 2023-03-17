@@ -1,0 +1,18 @@
+﻿@using Todo.Domain.Models;
+@model (List<TodoItem> Items, bool HideCompleted)
+
+@{
+    ViewData["Title"] = $"Favorite lists";
+}
+
+
+<partial name="TodoItems" model="@Model.Items" />
+
+<div class="dropdown position-absolute bottom-0 end-0 mb-4 me-4 pe-1">
+    <a class="btn btn-lg btn-light py-1 px-2" type="button" data-bs-toggle="tooltip"
+       data-bs-placement="left" data-bs-title="@(Model.HideCompleted ? "Show" : "Hide") completed tasks"
+       asp-action="Favorite" asp-controller="Home"
+       asp-route-hideCompleted="@(!Model.HideCompleted)">
+        <i class="bi bi-eye@(Model.HideCompleted ? "" : "-slash") text-primary"></i>
+    </a>
+</div>

@@ -1,0 +1,23 @@
+﻿@using Todo.Application.Infrastructure;
+@using Todo.Domain.Models;
+@using Todo.Domain.Enums;
+@model (List<TodoItem> Items, TodoList List, bool HideCompleted)
+
+@{
+    ViewData["Title"] = $"List \"{Model.List.Title}\"";
+}
+
+<partial name="TodoItems" model="@Model.Items" />
+
+<div class="dropdown position-absolute bottom-0 end-0 mb-4 me-4 pe-1">
+    <a class="btn btn-lg btn-light py-1 px-2" type="button" data-bs-toggle="tooltip"
+       data-bs-placement="left" data-bs-title="@(Model.HideCompleted ? "Show" : "Hide") completed tasks"
+       asp-action="Index" asp-controller="TodoList" asp-rote-id="@Model.List.Id"
+       asp-route-hideCompleted="@(!Model.HideCompleted)">
+        <i class="bi bi-eye@(Model.HideCompleted ? "" : "-slash") text-primary"></i>
+    </a>
+    <a class="btn btn-lg btn-primary py-1 px-2" asp-action="Create" asp-controller="TodoItem"
+       asp-route-listId="@Model.List.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
+        <i class="bi bi-plus-lg"></i>
+    </a>
+</div>

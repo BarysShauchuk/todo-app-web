@@ -1,0 +1,105 @@
+﻿@using Todo.Application.Infrastructure;
+@using Todo.Domain.Enums;
+@using Todo.Domain.Models;
+@model List<TodoItem>
+
+<div class="bg-light rounded p-3 overflow-auto h-100 flex-grow-0 gap-3 modal-content">
+    
+
+    @foreach (var item in Model)
+    {
+        <div class="card hover-parent-hider">
+
+            <div class="card-header align-items-center d-flex justify-content-between">
+                <div>
+                    <div class="btn-group dropdown-center">
+                        @switch (item.Status)
+                        {
+                            case Status.NotStarted:
+                                <button class="btn btn-secondary btn-sm rounded" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    Not started
+                                </button>
+                                break;
+                            case Status.InProgress:
+                                <button class="btn btn-warning btn-sm rounded" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    In process
+                                </button>
+                                break;
+                            case Status.Completed:
+                                <button class="btn btn-primary btn-sm rounded" type="button"
+                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                    Completed
+                                </button>
+                                break;
+                        }
+
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item link-secondary small" asp-action="ChangeStatus" asp-controller="TodoItem" asp-route-id="@item.Id" asp-route-status="@Status.NotStarted" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">Not started</a></li>
+                            <li><a class="dropdown-item link-warning small" asp-action="ChangeStatus" asp-controller="TodoItem" asp-route-id="@item.Id" asp-route-status="@Status.InProgress" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">In progress</a></li>
+                            <li><a class="dropdown-item link-primary small" asp-action="ChangeStatus" asp-controller="TodoItem" asp-route-id="@item.Id" asp-route-status="@Status.Completed" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">Completed</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="btn-group dropdown-center hover-child-hidden">
+                        <button class="btn btn-light text-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-three-dots-vertical d-lg-none"></i>
+                            <span class="d-lg-inline d-none">Actions</span>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li>
+                                <a class="dropdown-item small" asp-action="Update"
+                               asp-controller="TodoItem" asp-route-id="@item.Id" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                            </li>
+                            <li>
+                                <button class="dropdown-item text-danger small" data-bs-toggle="modal"
+                                        data-bs-target="#delete-item-@item.Id">
+                                    <i class="bi bi-trash3"></i> Delete
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <span>@item.DueDate?.ToString("D")</span>
+                    <a class="bg-transparent border-0 pe-0" type="button"
+                        asp-action="ChangeRemind" asp-controller="TodoItem" asp-route-id="@item.Id"
+                   asp-route-remind="@(!item.Remind)" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
+                        <i class="bi bi-bell@(item.Remind ? "-fill" : "") text-info"></i>
+                    </a>
+                    <a class="bg-transparent border-0 pe-0" type="button"
+                        asp-action="ChangeFavorite" asp-controller="TodoItem" asp-route-id="@item.Id"
+                        asp-route-favorite="@(!item.Favorite)" asp-route-returnUrl="@ViewContext.HttpContext.Request.PathAndQuery()">
+                        <i class="bi bi-heart@(item.Favorite ? "-fill" : "") text-danger"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">
+                    @item.Title
+                </h5>
+                <p class="mb-0" style="white-space: break-spaces">@item.Description</p>
+            </div>
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="placeholder-lg"></div>
+    }
+    else
+    {
+        <div class="h-100 rounded text-secondary user-select-none
+            d-flex justify-content-center align-items-center text-center">
+            There are no items yet.
+        </div>
+    }
+
+
+    
+</div>
+
+<partial name="ModalDialogs/DeleteItemsConformation" model="@Model" />
